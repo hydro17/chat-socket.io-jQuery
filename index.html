@@ -10,10 +10,27 @@
 </head>
 
 <body>
-  <h3>Chat</h3>
+  <div class="container">
+    <h2>Chat</h2>
 
+    <ul id="messages">
+      <li>Hello</li>
+    </ul>
+
+    <div id="bottom-bar">
+      <div id="nickname"></div>
+
+      <form action="">
+        <input type="text" id="newMessage">
+        <input type="submit" value="Send">
+      </form>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
   <script src="/socket.io/socket.io.js"></script>
-  <script src="/chat.js" type="module"></script>
+  <script src="chat.js" type="module"></script>
 </body>
 
 </html>
