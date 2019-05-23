@@ -9,7 +9,10 @@ app.get('/', (req, res) => res.sendFile(__dirname + "/index.html"));
 app.use(express.static('public'))
 
 io.on('connection', (socket) => {
-    console.log("client app connected - number of connections: ", ++connectionsCount);
+    console.log("a user connected - number of connections: ", ++connectionsCount);
+
+    socket.on('disconnect', () => console.log("a user disconnected"));
+    socket.on('chat message', (message) => socket.broadcast.emit('chat message', message));
   }
 );
 
