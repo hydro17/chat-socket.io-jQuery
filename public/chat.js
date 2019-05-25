@@ -1,6 +1,6 @@
 // const socket = io("http://localhost:3000");
 $(function() {
-  const messages = $("#messages")[0];
+  const messages = $("#messages-container")[0];
   let nickname;
 
   // eslint-disable-next-line no-undef
@@ -47,6 +47,7 @@ $(function() {
       nickname,
       content: $("#newMessage").val(),
     });
+
     $("#newMessage").val("");
   });
 
