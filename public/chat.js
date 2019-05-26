@@ -35,7 +35,7 @@ $(function() {
     }
   }
 
-  $("#newMessage").on("keyup", (e) => {
+  $("#input-message").on("keyup", (e) => {
     if (e.key === "Enter") {
       e.target.dispatchEvent(new Event("submit"));
     }
@@ -50,10 +50,10 @@ $(function() {
 
     socket.emit("chat message", {
       nickname,
-      content: $("#newMessage").val(),
+      content: $("#input-message").val(),
     });
 
-    $("#newMessage").val("");
+    $("#input-message").val("");
   });
 
   $("#nickname").contextmenu((e) => {

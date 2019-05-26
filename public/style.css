@@ -56,7 +56,7 @@ form {
   color: #888;
 } 
 
-#newMessage {
+#input-message {
   flex: 1;
   margin-right: 10px;
   padding: 0.1em 0.3em;
