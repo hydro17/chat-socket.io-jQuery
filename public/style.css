@@ -65,3 +65,14 @@ form {
 #info {
   margin-bottom: 0;
 }
+
+#context-menu {
+  position: absolute;
+  background-color: #eee;
+  padding: 0.5em;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}

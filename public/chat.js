@@ -13,10 +13,15 @@ $(function() {
     console.log(`socket.id: ${socket.id}`);
     nickname = sessionStorage.getItem("nickname");
     if (!nickname) {
-      nickname = prompt("Type in your nickname:", "anonymous") || "anonymous";
-      sessionStorage.setItem("nickname", nickname);
+      nickname = newNickname("Type in your nickname:", "anonymous");
     }
     $("#nickname").html(nickname);
+  }
+
+  function newNickname(nicknameQuestion, currentNickname) {
+    const nickname = prompt(nicknameQuestion, currentNickname) || currentNickname;
+    sessionStorage.setItem("nickname", nickname);
+    return nickname;
   }
 
   function onChatMessage(message) {
@@ -51,8 +56,34 @@ $(function() {
     $("#newMessage").val("");
   });
 
-  window.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowUp") messages.scrollTop -= 10;
-    if (e.key === "ArrowDown") messages.scrollTop += 10;
+  $("#nickname").contextmenu((e) => {
+    e.preventDefault();
+
+    $("#context-menu")
+      .css({ left: e.pageX, top: e.pageY })
+      .removeClass("hidden");
+
+    $(window).on("keyup", (e) => {
+      if (e.key === "Escape") {
+        $("#context-menu").addClass("hidden");
+      }
+    });
+  });
+
+  $("#context-menu").on("click", (e) => {
+    $(e.target).addClass("hidden");
+    nickname = newNickname("Type in your new nickname:", nickname) || nickname;
+    setTimeout(() => $("#nickname").html(nickname), 1);
+  });
+
+  $(window).on("keydown", (e) => {
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      messages.scrollTop -= 10;
+    }
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      messages.scrollTop += 10;
+    }
   });
 });
