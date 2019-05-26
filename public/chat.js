@@ -48,6 +48,8 @@ $(function() {
   $("form").submit((e) => {
     e.preventDefault();
 
+    if ($("#input-message").val() === "") return;
+
     socket.emit("chat message", {
       nickname,
       content: $("#input-message").val(),
