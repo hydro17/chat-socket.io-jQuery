@@ -8,9 +8,11 @@ $(function() {
   socket.on("connect", onConnect);
   socket.on("disconnect", () => console.log(`disconnected`));
   socket.on("chat message", onChatMessage);
+  socket.on("is typing", onIsTyping);
 
   function onConnect() {
     console.log(`socket.id: ${socket.id}`);
+
     nickname = sessionStorage.getItem("nickname");
     if (!nickname) {
       nickname = newNickname("Type in your nickname:", "anonymous");
@@ -26,7 +28,16 @@ $(function() {
 
   function onChatMessage(message) {
     $("#messages").append(`<li>${message}</li>`);
+    $("#is-typing").html("");
+    scrollBottomMessagesWindow();
+  }
 
+  function onIsTyping(isTypingInfo) {
+    $("#is-typing").html(isTypingInfo);
+    scrollBottomMessagesWindow();
+  }
+
+  function scrollBottomMessagesWindow() {
     const isFullyScrolledToBottom =
       messages.scrollHeight - (messages.offsetHeight + messages.scrollTop) < 40;
 
@@ -38,7 +49,10 @@ $(function() {
   $("#input-message").on("keyup", (e) => {
     if (e.key === "Enter") {
       e.target.dispatchEvent(new Event("submit"));
+      return;
     }
+
+    socket.emit("is typing", nickname);
   });
 
   // newMessage[0].onkeyup = (e) => {
