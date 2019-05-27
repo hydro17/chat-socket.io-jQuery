@@ -28,7 +28,12 @@ $(function() {
   }
 
   function onChatMessage(message) {
-    $("#messages").append(`<li><strong>${message.nickname}</strong>: ${message.content}</li>`);
+    $("#messages").append(
+      $(`<li><strong>${message.nickname}</strong>: ${message.content}</li>`)
+        .delay(50)
+        .hide()
+        .fadeIn()
+    );
     removeIsTypingItem(message.nickname);
     scrollBottomMessagesWindow();
   }
@@ -45,7 +50,8 @@ $(function() {
   }
 
   function removeIsTypingItem(nickname) {
-    $("#is-typing > li:contains(" + nickname + ")").remove();
+    // $("#is-typing > li:contains(" + nickname + ")").remove();
+    $("#is-typing > li:contains(" + nickname + ")").fadeOut(50);
   }
 
   function scrollBottomMessagesWindow() {
