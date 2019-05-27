@@ -2,7 +2,6 @@
 $(function() {
   const messages = $("#messages-container")[0];
   let nickname;
-  let softScrollHandle;
 
   // eslint-disable-next-line no-undef
   const socket = io();
@@ -61,7 +60,7 @@ $(function() {
 
     if (isFullyScrolledToBottom) {
       if (messages.scrollTop - 1 < messages.scrollHeight - messages.offsetHeight) {
-        softScrollHandle = setInterval(softScrollDown, 50);
+        softScrollDown();
       }
       // messages.scrollTop = messages.scrollHeight;
     }
@@ -70,8 +69,7 @@ $(function() {
   function softScrollDown() {
     if (messages.scrollTop - 2 < messages.scrollHeight - messages.offsetHeight) {
       ++messages.scrollTop;
-    } else {
-      clearInterval(softScrollHandle);
+      setTimeout(softScrollDown, 30);
     }
   }
 
