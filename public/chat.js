@@ -2,6 +2,7 @@
 $(function() {
   const messages = $("#messages-container")[0];
   let nickname;
+  let softScrollHandle;
 
   // eslint-disable-next-line no-undef
   const socket = io();
@@ -56,10 +57,21 @@ $(function() {
 
   function scrollBottomMessagesWindow() {
     const isFullyScrolledToBottom =
-      messages.scrollHeight - (messages.offsetHeight + messages.scrollTop) < 40;
+      messages.scrollHeight - messages.offsetHeight - messages.scrollTop < 40;
 
     if (isFullyScrolledToBottom) {
-      messages.scrollTop = messages.scrollHeight;
+      if (messages.scrollTop - 1 < messages.scrollHeight - messages.offsetHeight) {
+        softScrollHandle = setInterval(softScrollDown, 50);
+      }
+      // messages.scrollTop = messages.scrollHeight;
+    }
+  }
+
+  function softScrollDown() {
+    if (messages.scrollTop - 2 < messages.scrollHeight - messages.offsetHeight) {
+      ++messages.scrollTop;
+    } else {
+      clearInterval(softScrollHandle);
     }
   }
 
@@ -68,8 +80,9 @@ $(function() {
       e.target.dispatchEvent(new Event("submit"));
       return;
     }
+    // console.log(e.key);
+    if (e.key === "ArrowUp" || e.key === "ArrowDown") return;
 
-    // console.log("client is typing");
     socket.emit("is typing", nickname);
   });
 
