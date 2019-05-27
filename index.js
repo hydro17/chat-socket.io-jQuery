@@ -4,7 +4,7 @@ const http = require("http").Server(app);
 const io = require("socket.io")(http);
 
 let connectionsCount = 0;
-let isTypingLastActivity;
+let isTypingLastActivity = new Map();
 let checkingUserActivity;
 
 app.get("/", (req, res) => res.sendFile(__dirname + "/index.html"));
@@ -17,25 +17,39 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => console.log("a user disconnected"));
 
-  socket.on("chat message", (message) =>
-    io.emit("chat message", `<strong>${message.nickname}</strong>: ${message.content}`)
-  );
+  socket.on("chat message", (message) => {
+    io.emit("chat message", message);
+    isTypingLastActivity.delete(message.nickname);
+  });
 
   socket.on("is typing", (nickname) => {
-    isTypingLastActivity = Date.now();
-    io.emit("is typing", `<em>${nickname} is typing</em>`);
-    if (isTypingLastActivity) {
+    // console.log("from is typing ", isTypingLastActivity);
+    if (!isTypingLastActivity.has(nickname)) {
+      io.emit("is typing", `${nickname} is typing`);
+    }
+
+    isTypingLastActivity.set(nickname, Date.now());
+
+    if (!checkingUserActivity) {
       checkingUserActivity = setInterval(checkUserActivity, 1000);
     }
   });
 });
 
 function checkUserActivity() {
-  if (Date.now() - isTypingLastActivity > 3000) {
-    io.emit("is typing", "");
-    isTypingLastActivity = null;
+  // console.log("from checkUserActivity ", isTypingLastActivity);
+  if (isTypingLastActivity.size === 0) {
     clearInterval(checkingUserActivity);
+    checkingUserActivity = null;
+    return;
   }
+
+  isTypingLastActivity.forEach((lastActivity, nickname) => {
+    if (Date.now() - lastActivity > 5000) {
+      io.emit("is not typing", nickname);
+      isTypingLastActivity.delete(nickname);
+    }
+  });
 }
 
 http.listen(3000, () => console.log("listening on port: 3000..."));

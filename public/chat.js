@@ -9,6 +9,7 @@ $(function() {
   socket.on("disconnect", () => console.log(`disconnected`));
   socket.on("chat message", onChatMessage);
   socket.on("is typing", onIsTyping);
+  socket.on("is not typing", onIsNotTyping);
 
   function onConnect() {
     console.log(`socket.id: ${socket.id}`);
@@ -27,14 +28,24 @@ $(function() {
   }
 
   function onChatMessage(message) {
-    $("#messages").append(`<li>${message}</li>`);
-    $("#is-typing").html("");
+    $("#messages").append(`<li><strong>${message.nickname}</strong>: ${message.content}</li>`);
+    removeIsTypingItem(message.nickname);
     scrollBottomMessagesWindow();
   }
 
   function onIsTyping(isTypingInfo) {
-    $("#is-typing").html(isTypingInfo);
+    console.log(`${isTypingInfo} - ${new Date().toLocaleString()}`);
+    $("#is-typing").append(`<li>${isTypingInfo}</li>`);
     scrollBottomMessagesWindow();
+  }
+
+  function onIsNotTyping(nickname) {
+    console.log(`is not typing ${nickname} - ${new Date().toLocaleString()}`);
+    removeIsTypingItem(nickname);
+  }
+
+  function removeIsTypingItem(nickname) {
+    $("#is-typing > li:contains(" + nickname + ")").remove();
   }
 
   function scrollBottomMessagesWindow() {
@@ -52,6 +63,7 @@ $(function() {
       return;
     }
 
+    // console.log("client is typing");
     socket.emit("is typing", nickname);
   });
 
