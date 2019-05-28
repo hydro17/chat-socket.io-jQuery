@@ -18,16 +18,30 @@ h2 {
   text-shadow: 3px 3px 3px #999;
 }
 
-#messages-container {
+#messages-and-users-list-container {
+  display:flex;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+}
+
+#messages-container, #users {
   border: 1px solid black;
   padding: 0.4em 0.5em;
   background-color:white;
-  height: 10vh;
   /* max-height: 70vh; */
-  margin-top: 0.5em;
-  margin-bottom: 1em;
   box-shadow: 3px 3px 3px #999;
   border-radius: 4px;
+}
+
+#messages-container {
+  flex-grow: 1;
+  height: 10vh;
+  overflow: auto;
+}
+
+#users {
+  margin-left: 10px;
+  width: 100px;
   overflow: auto;
 }
 
@@ -49,12 +63,13 @@ form {
 }
 
 #nickname {
-  min-width: 100px;
+  min-width: 50px;
   background-color: white;
   margin-right: 10px;
   padding: 0.1em 0.3em;
   font-weight: bold;
   color: #888;
+  overflow: auto;
 } 
 
 #input-message {
@@ -78,10 +93,13 @@ form {
   display: none;
 }
 
-#is-typing {
+#is-typing, #users-list {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+#is-typing {
   font-style: italic;
   color: #888;
 }

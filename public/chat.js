@@ -6,10 +6,20 @@ $(function() {
   // eslint-disable-next-line no-undef
   const socket = io();
   socket.on("connect", onConnect);
-  socket.on("disconnect", () => console.log(`disconnected`));
+  socket.on("disconnect", () => {
+    console.log("client side - disconnected");
+  });
   socket.on("chat message", onChatMessage);
   socket.on("is typing", onIsTyping);
   socket.on("is not typing", onIsNotTyping);
+  socket.on("update users list", (usersListArray) => {
+    let usersListHtml = "";
+    usersListArray.forEach((nickname) => {
+      usersListHtml += `<li>${nickname}</li>`;
+      // $("#users-list").append(`<li>${nickname}</li>`);
+    });
+    $("#users-list").html(usersListHtml);
+  });
 
   function onConnect() {
     console.log(`socket.id: ${socket.id}`);
@@ -18,6 +28,9 @@ $(function() {
     if (!nickname) {
       nickname = newNickname("Type in your nickname:", "anonymous");
     }
+
+    socket.emit("add user", nickname);
+
     $("#nickname").html(nickname);
   }
 
@@ -117,8 +130,13 @@ $(function() {
 
   $("#context-menu").on("click", (e) => {
     $(e.target).addClass("hidden");
-    nickname = newNickname("Type in your new nickname:", nickname) || nickname;
-    setTimeout(() => $("#nickname").html(nickname), 1);
+    setTimeout(() => {
+      const oldNickname = nickname;
+      nickname = newNickname("Type in your new nickname:", nickname) || nickname;
+      socket.emit("remove user", oldNickname);
+      socket.emit("add user", nickname);
+      $("#nickname").html(nickname);
+    }, 1);
   });
 
   $(window).on("keydown", (e) => {
