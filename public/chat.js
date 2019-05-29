@@ -41,13 +41,13 @@ $(function() {
   }
 
   function onChatMessage(message) {
+    removeIsTypingItem(message.nickname);
     $("#messages").append(
       $(`<li><strong>${message.nickname}</strong>: ${message.content}</li>`)
         .delay(50)
         .hide()
         .fadeIn()
     );
-    removeIsTypingItem(message.nickname);
     scrollBottomMessagesWindow();
   }
 
