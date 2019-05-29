@@ -74,6 +74,12 @@ form, #bottom-bar {
 
 form {
   flex: 1;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+#bottom-bar {
+  align-items: flex-start;
 }
 
 #nickname {
@@ -88,12 +94,11 @@ form {
 
 #input-message {
   flex: 1;
-  margin-right: 10px;
   padding: 0.1em 0.3em;
 }
 
-#info {
-  margin-bottom: 0;
+input[type='submit'] {
+  margin-left: 10px;
 }
 
 #context-menu {
