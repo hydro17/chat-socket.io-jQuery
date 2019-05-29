@@ -11,18 +11,18 @@ body {
   border-radius: 5px;
 }
 
-h2, h4 {
+#chat-header, #users-list-header {
   margin: 0;
   color: white;
   text-shadow: 3px 3px 3px #999;
 }
 
-h2 {
+#chat-header {
   grid-area: chat-header;
   font-weight: normal;
 }
 
-h4 {
+#users-list-header {
   grid-area: users-list-header;
   align-self: end;
 }
@@ -59,7 +59,7 @@ h4 {
   overflow: auto;
 }
 
-h4, #users {
+#users-list-header, #users {
   margin-left: 10px;
 }
 
